@@ -1,0 +1,32 @@
+int8_t joy = readJoystick();
+
+		if(globaltimer.centiseconds % 100 == 0){
+			gotoxy(1,1);
+			printf("clock: %02d : %02d : %02d : %02d \n ",globaltimer.hours,globaltimer.minutes,globaltimer.seconds,globaltimer.centiseconds);
+		}
+		if (joy==1) {
+
+		}
+		else if (joy==2) {
+			TIM2->CR1 = 0x0000;
+			initClock();
+		}
+		else if (joy==4) {
+			gotoxy(1,2);
+			printf("split 1: %02d : %02d : %02d : %02d",globaltimer.hours,globaltimer.minutes,globaltimer.seconds,globaltimer.centiseconds);
+		}
+
+		else if (joy==8) {
+			gotoxy(1,3);
+			printf("split 2: %02d : %02d : %02d : %02d",globaltimer.hours,globaltimer.minutes,globaltimer.seconds,globaltimer.centiseconds);
+		}
+		else if (joy==16) {
+			if(TIM2->CR1 = 0x0001){
+				TIM2->CR1 = 0x0000;
+			}
+			else {
+				timer2();
+			}
+
+
+		}
