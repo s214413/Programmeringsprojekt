@@ -1,0 +1,98 @@
+#include "stm32f30x_conf.h" // STM32 config
+#include "30010_io.h" // Input/output library for this course
+#include "ansi.h"
+#include "LUT.h"
+#include "control.h"
+#include "timer.h"
+
+
+volatile timer globaltimer;
+
+
+void initclock(){
+	globaltimer.centiseconds=0;
+	globaltimer.seconds=0;
+	globaltimer.minutes=0;
+	globaltimer.hours=0;
+}
+
+void tickClock() {
+	// this section translates the clock ticker to timer values
+	globaltimer.centiseconds++;
+	if (globaltimer.centiseconds >= 100){
+		globaltimer.centiseconds = 0; //reset the centiseconds
+		globaltimer.seconds++; //convert the 100 centiseconds to seconds
+	}
+	if (globaltimer.seconds >= 60){
+		globaltimer.seconds = 0; //reset the seconds
+		globaltimer.minutes++; //convert the 60 seconds to minutes
+	}
+	if (globaltimer.minutes >= 60){
+		globaltimer.minutes = 0; //reset the minutes
+		globaltimer.hours++; //convert the 60 minutes to hours
+	}
+	if (globaltimer.hours >= 60){
+		globaltimer.hours = 0; //if hours exceeds 60, it is reset
+	}
+}
+
+void TIM2_IRQHandler() {
+ //Do whatever you want here, but make sure it doesn’t take too much
+	tickClock();
+	TIM2->SR &= ~0x0001; // Clear interrupt bit
+}
+
+int main(void)
+{
+
+	uart_init( 9600 ); // Initialize USB serial emulation at 9600 baud
+
+	volatile uint16_t interruptflag;
+
+
+	clrscr();
+	readJoystick();
+
+	initclock();
+
+
+	while(1){
+		int8_t joy = readJoystick();
+		joyLed();
+
+		if (globaltimer.centiseconds % 100 == 0) {
+			gotoxy(1,1);
+			printf("Time since start: %02d:%02d:%02d:%02d \n", globaltimer.hours, globaltimer.minutes, globaltimer.seconds, globaltimer.centiseconds);
+		}
+		if (joy==16){ //When joystick is center, stop/start
+			if (TIM2->CR1 == 0x0001) { 
+				TIM2->CR1 = 0x0000; //if timer is on, stop time
+			}
+			else {
+				timer2(); // if not on, start time
+			}
+		}
+		else if (joy==4){ //When joystick is right, split time 1
+			gotoxy(1,2);
+			printf("Split time 1:     %02d:%02d:%02d:%02d \n", globaltimer.hours, globaltimer.minutes, globaltimer.seconds, globaltimer.centiseconds);
+		}
+		else if (joy==8){ //When joystick is right, split time 2
+			gotoxy(1,3);
+			printf("Split time 2:     %02d:%02d:%02d:%02d \n", globaltimer.hours, globaltimer.minutes, globaltimer.seconds, globaltimer.centiseconds);
+		}
+		else if (joy==2){
+			TIM2->CR1 = 0x0000;
+			initclock(); //When joystick is down, reset
+			}
+
+
+	}
+
+
+
+
+
+
+
+
+ }
