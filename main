@@ -48,13 +48,14 @@ int main(void)
 	uart_init( 9600 ); // Initialize USB serial emulation at 9600 baud
 
 	volatile uint16_t interruptflag;
+	int8_t countpresses = 0;
 
 
 	clrscr();
 	readJoystick();
 
+	timer2();
 	initclock();
-
 
 	while(1){
 		int8_t joy = readJoystick();
@@ -65,11 +66,13 @@ int main(void)
 			printf("Time since start: %02d:%02d:%02d:%02d \n", globaltimer.hours, globaltimer.minutes, globaltimer.seconds, globaltimer.centiseconds);
 		}
 		if (joy==16){ //When joystick is center, stop/start
-			if (TIM2->CR1 == 0x0001) { 
-				TIM2->CR1 = 0x0000; //if timer is on, stop time
+			countpresses++;
+
+			if (countpresses % 2) {
+				clockstart(); // start clock on odd numbers of countpresses
 			}
 			else {
-				timer2(); // if not on, start time
+				clockstop(); // stop clock on even numbers of countpresses
 			}
 		}
 		else if (joy==4){ //When joystick is right, split time 1
@@ -81,7 +84,7 @@ int main(void)
 			printf("Split time 2:     %02d:%02d:%02d:%02d \n", globaltimer.hours, globaltimer.minutes, globaltimer.seconds, globaltimer.centiseconds);
 		}
 		else if (joy==2){
-			TIM2->CR1 = 0x0000;
+			clockstop();
 			initclock(); //When joystick is down, reset
 			}
 
