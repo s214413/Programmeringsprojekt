@@ -1,0 +1,116 @@
+#include "stm32f30x_conf.h" // STM32 config
+#include "30010_io.h" // Input/output library for this course
+#include "ansi.h"
+#include "LUT.h"
+#include "control.h"
+#include "timer.h"
+#include "charset.h"
+#include "display.h"
+#include "position.h"
+#include "graphics.h"
+
+
+int16_t count = 0;
+
+int main(void) {
+	uart_init( 9600 ); // Initialize USB serial emulation at 9600 baud
+	clrscr();
+	/*printFix(calcsin(0));
+printFix(calcsin(64)); //sin(45)
+printFix(calcsin(-110)); //sin(-78)
+printFix(calcsin(923)); //sin(649)
+printFix(calccos(0));
+printFix(calccos(64)); //cos(45)
+printFix(calccos(-111));
+printFix(calccos(923));*/
+
+	/*rotateVector(1,2,256);
+printf("\n");
+rotateVector(6,4,-14);
+printf("\n");
+rotateVector(-4,-4,1280);
+printf("\n");
+rotateVector(-4,2,-50);*/
+
+	/*uint8_t k;
+	uint8_t counter;
+	struct ball b = {2,2,2,2};
+	struct window w = {1,1,100,30};
+	walls(&w,1);
+	volatile uint16_t interrupt;
+	int8_t countpresses = 0;
+	//timer2();
+	initClock();
+	readJoystick();
+
+
+	lcd_init();
+	lcd_reset();
+	uint8_t graphbuffer[512];
+
+	memset(graphbuffer, 0x00, 512);*/
+
+
+
+		//int8_t countpresses = 0;
+		clrscr();
+		//initled();
+		//timer2();
+		//setFreq(0);
+
+
+		/*init2Axis();
+		timer2();
+		initClock();
+		initPot();
+		calibrate();
+		initButton();
+
+		char str[30];
+		char str2[30];*/
+
+		printf("%c[?25l", ESC);
+		struct ship s = {50,28};
+		struct window w = {1,1,100,30};
+		walls(&w,0);
+
+	while(1){
+		readJoystick();
+		//joyled();
+		posSpaceship(&s, 1, &w);
+		drawSpaceship(&s, &w);
+		clrSpaceship(&s);
+
+
+			/*lcd_update(graphbuffer, interrupt);
+
+			if(count < 200) {
+				count++;
+			} else if (count == 200) {
+				lcd_scroll(graphbuffer);
+				count = 0;
+			}
+
+			int16_t x1 = set2Axis(1);
+			int16_t x2 = set2Axis(2);
+			sprintf(str, "Pot 1: %04d", x1);
+			sprintf(str2, "Pot 2: %04d", x2);
+			lcd_write_string(graphbuffer, str, 1,0);
+			lcd_write_string(graphbuffer, str2, 1,1);
+			lcd_push_buffer(graphbuffer);
+
+			int8_t a = setButton();
+			printf("%d",a);*/
+
+			/*clrball(&b,&w);
+			posBall(&b);
+			drawBall(&b,&w);*/
+			//bounce(&b,&w,&counter);
+			//ballHit(&w, &counter);
+			//timer2();
+			//setFreq(0);*/
+
+
+
+		}
+	}
