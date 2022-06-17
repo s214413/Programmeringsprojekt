@@ -17,6 +17,34 @@ void posBall(struct window *w, struct ball *b1) {
 	}
 }
 
+void posBullet(struct object *b1, struct object *a, struct window *w) {
+	uint32_t dx = abs(b1->x - a->x) << 14;
+	uint32_t dy = abs(b1->y - a->y) << 14;
+	uint32_t d = sqrt(pow(dx,2) + pow(dy,2));
+	uint32_t f = 2*(FIX14_DIV((15 << 14), d));
+
+	f = f >> 14;
+	b1->x += b1->vx;
+	b1->y += b1->vy;
+
+	/*if(b1->y < a->y + 2 && b1->y > a->y && b1->x < a->x + 8 && b1->x > a->x - 6) {
+		b1->vy = 0;
+	}*/
+
+	if(b1->x > a->x && b1->x < a->x + 10 && abs(b1->vx) < 2 && b1->y < a->y) {
+		b1->vx = b1->vx - (f/1+abs(b1->vx));
+	}
+
+	if(b1->x < a->x && b1->x > a->x - 10 && abs(b1->vx) < 2 && b1->y < a->y) {
+		b1->vx = b1->vx + (f/1+abs(b1->vx));
+	}
+
+	if (b1->x <= w->x1 || b1->x >= w->x2 || b1->y <= w->y1){
+		b1->vx = 0;
+		b1->vy = 0;
+	}
+}
+
 void posBullet(struct window *w, struct bullet *b1) {
 	b1->x += b1->vx; //update the x-position by adding the velocity in x-direction
 	b1->y += b1->vy; //update the y-position by adding the velocity in y-direction
