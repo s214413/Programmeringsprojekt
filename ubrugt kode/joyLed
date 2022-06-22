@@ -1,0 +1,21 @@
+void joyLed() {
+	if (readJoystick()==1){
+		setLed(1, 0, 0); //When joystick is up, led=red
+	}
+	else if (readJoystick()==2){
+		setLed(0, 1, 0); //When joystick is down, led=green
+	}
+	else if (readJoystick()==4){
+		setLed(0, 0, 1); //When joystick is left, led=blue
+	}
+	else if (readJoystick()==8){
+		setLed(1, 1, 0); //When joystick is right, led=yellow
+	}
+	else if (readJoystick()==16){
+		setLed(1, 1, 1); //When joystick is center, led=white
+	}
+	else {
+		setLed(0, 0, 0); //Turn off led when joystick is non of above
+	}
+
+}
