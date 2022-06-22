@@ -1,0 +1,6 @@
+void lcd_update(uint8_t *graphbuffer,int8_t interruptflag){
+	if (interruptflag=1){
+		lcd_push_buffer(graphbuffer);
+		interruptflag = 0;
+	}
+}
