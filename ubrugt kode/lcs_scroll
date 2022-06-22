@@ -1,0 +1,15 @@
+void lcd_scroll(uint8_t *graphbuffer) {
+	uint16_t i, pos1 = graphbuffer[1], pos2 = graphbuffer[128], pos3 = graphbuffer[256], pos4 = graphbuffer[384];
+	for(i = 0; i < 127; i++) {
+		graphbuffer[i] = graphbuffer[i+1];
+		graphbuffer[128 + i] = graphbuffer[128+i+1];
+		graphbuffer[256 + i] = graphbuffer[256+i+1];
+		graphbuffer[384 + i] = graphbuffer[384+i+1];
+	}
+
+	graphbuffer[0] = pos1;
+	graphbuffer[127] = pos2;
+	graphbuffer[255] = pos3;
+	graphbuffer[383] = pos4;
+
+}
